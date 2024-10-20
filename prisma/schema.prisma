@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" 
+  url      = env("DATABASE_URL") 
+}
+
+model Empresa {
+  idEmpresa             String      @id @default(uuid()) 
+  razaoSocial           String                                
+  nomeEmpresa           String                                
+  cnpjEmpresa           Int         @unique                      
+  folhaSalarialEmpresa  Float       @default(0)
+  dataCriacaoEmpresa    DateTime    @default(now())                  
+  emailEmpresa          String
+  endereco              String                                
+  telefoneEmpresa       Int                                   
+  setores               Setor[]
+  empresaAtualizada     DateTime
+}
+
+model Setor {
+  idSetor             String     @id @default(uuid()) 
+  nomeSetor           String                            
+  descricao           String  
+  emailSetor          String
+  dataCriacaoSetor    DateTime   @default(now())
+  folhaSalarial       Float      @default(0)            
+  empresa             Empresa    @relation(fields: [empresaId], references: [idEmpresa]) 
+  empresaId           String                              
+  //funcionariosAtivos  Funcionario[]     -> implementar na consulta
+  funcionarios        Funcionario[]
+  setorAtualizado     DateTime                      
+}
+
+enum Hierarquia{
+  Executivo
+  Gerencia
+  Supervisao
+  Efetivo
+  Estagiario
+}
+
+model Funcionario {
+  idFuncionario         String     @id @default(uuid()) 
+  nomeFuncionario       String                            
+  salario               Float                             
+  ativo                 Boolean                           
+  cpf                   String     @unique                
+  emailFuncionario      String                            
+  dataDeAdmissao        DateTime   @default(now())                   
+  telefoneFuncionario   Int                              
+  dataDeDesligamento    DateTime?                       
+  Hierarquia            Hierarquia                            
+  setor                 Setor      @relation(fields: [setorId], references: [idSetor]) 
+  setorId               String                            
+  funcionarioAtualizado DateTime
+}

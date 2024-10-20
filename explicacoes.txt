@@ -1,0 +1,5 @@
+Ao analisar o problema, pensei em uma outra forma de fazer o MER:
+Fazer com que a relação de empresa e setor nao seja de muitos para muitos, mas sim de
+um para muitos. Da mesma forma fiz uma nova entidade, funcionario, que é relacionado de
+um para muitos com setor.
+
